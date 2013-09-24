@@ -8,6 +8,10 @@ Example usage:
 
 ```python
 
+# To use: 
+#    SERVER_MODE: python <scriptname>
+#    CLIENT_MODE: python <scriptname> client
+
 from udp_tools import UDP_Server
 import sys;
 
