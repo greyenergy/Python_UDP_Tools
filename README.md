@@ -20,7 +20,7 @@ if(len(sys.argv) > 1):
 	mode = 1;
 
 # HANDLE MESSAGE
-def server_handle_msg(parent,msg,params,addr,port,pk_ident,ack_mode):
+def host_handle_msg(parent,msg,params,addr,port,pk_ident,ack_mode):
 	print "Server: Message Received\n-------\n";
 	print "Address: "+str(addr);
 	print "Port: "+str(port);
@@ -35,7 +35,7 @@ def client_handle_msg(parent,msg,props,addr,port,pk_ident,ack_mode):
 	print msg;
 
 # HANDLE CONNECTION EXPIRATION (keep-alive messages stop)
-def server_handle_expire(parent,rem_addr,rem_port):
+def host_handle_expire(parent,rem_addr,rem_port):
 	print "Server: Client Disconnected\n=======\n";
 	print "Address: "+str(rem_addr);
 	print "Port: "+str(rem_port);
@@ -45,34 +45,34 @@ def client_handle_expire(parent,rem_addr,rem_port):
 	print "Address: "+str(rem_addr);
 	print "Port: "+str(rem_port);
 
-remote_addr = "127.0.0.1";
-remote_port = 36500;
+host_addr = "127.0.0.1";
+host_port = 36500;
 
-local_addr = "127.0.0.1";
-local_port = 36501;
+client_addr = "127.0.0.1";
+client_port = 36501;
 
-t_addr = local_addr;
-t_port = local_port;
+t_addr = client_addr;
+t_port = client_port;
 
 serv = UDP_Server();
 
 if(mode == 0):
-	print "Starting server...";
-	# server
-	serv.server_msg_handler = server_handle_msg;
-	serv.server_exp_handler = server_handle_expire;
-	serv.start_server(remote_port);
+	print "Starting host...";
+	# host
+	serv.host_msg_handler = host_handle_msg;
+	serv.host_exp_handler = host_handle_expire;
+	serv.start_host(host_port);
 else:
 	# client
 	print "Starting client...";
-	serv.client_msg_handler = server_handle_msg;
+	serv.client_msg_handler = client_handle_msg;
 	serv.client_exp_handler = client_handle_expire;
-	ss = serv.start_client(remote_addr,remote_port,local_port);
+	ss = serv.start_client(host_addr,host_port,client_port);
 	if(not ss):
 		print "Failed to connect!";
 		exit();
-	t_port = remote_port;
-	t_addr = remote_addr;
+	t_port = host_port;
+	t_addr = host_addr;
 
 print "Ready.";
 
@@ -80,7 +80,6 @@ while(True):
 	print "Your message: ",;
 	s = sys.stdin.readline();
 	serv.send(s,None,t_addr,t_port);
-
 
 ```
 
