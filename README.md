@@ -80,7 +80,6 @@ while(True):
 	print "Your message: ",;
 	s = sys.stdin.readline();
 	serv.send(s,None,t_addr,t_port);
-#serv.check_end();
 
 
 ```
